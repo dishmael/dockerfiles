@@ -1,0 +1,28 @@
+FROM ruby:latest
+
+ENV WDS_SOCKET_PORT=0
+
+WORKDIR /usr/src
+
+# Install rails and setup a new API-only instance
+RUN apt-get -qq update \
+  && apt-get install -qq vim net-tools \
+  && gem install rails faker betterlorem \
+  && rails new . --api \
+  && bundle add faker betterlorem rack-cors
+
+RUN bundle install
+
+COPY cors.rb config/initializers/cors.rb
+
+COPY seeds.rb db/seeds.rb
+
+RUN rails g scaffold Task title:string description:text completed:boolean
+
+RUN rails db:migrate
+
+RUN rails db:seed
+
+ENTRYPOINT ["/bin/sh", "-c"]
+
+CMD ["bundle exec rails s -b 0.0.0.0"]
