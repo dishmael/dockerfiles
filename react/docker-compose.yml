@@ -1,0 +1,10 @@
+version: "1.0"
+
+services:
+  web:
+    build: .
+    environment:
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=false
+    ports:
+      - 3001:3000
