@@ -1,0 +1,18 @@
+FROM node:20
+
+# The NODE_ENV environment variable specifies the environment in which an
+# application is running (usually, development or production). One of the
+# simplest things you can do to improve performance is to set NODE_ENV
+# to production.
+ENV NODE_ENV=development
+
+ENV WDS_SOCKET_PORT=0
+
+WORKDIR /usr/src
+
+RUN apt-get update -y -qq \
+    && apt-get install -y -qq vim net-tools
+
+RUN npx -y create-next-app . --example https://github.com/dishmael/next-template
+
+CMD npm run dev
